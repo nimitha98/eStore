@@ -1,0 +1,26 @@
+<%- include("./partials/header") %>
+
+<div class="container">
+    <div class="container">
+        <header class="jumbotron">
+            <h1>Welcome to Electronics Store</h1>
+        </header>
+    </div>
+    <div class="container">
+        <div class="row">
+            <% products.forEach(function(product){ %>
+                <div class="col-md-3 col-sm-6">
+                    <div class="card">
+                        <img class="card-img-top" src="<%= product.image %>" alt="">
+                        <div class="card-body text-center">
+                            <h5 class="card-text"><%= product.name %></h5>
+                            <a href="/products/<%= product._id %>" class="btn btn-primary">Show Info</a>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>   
+        </div>     
+    </div>
+</div>
+ 
+<%- include("./partials/footer") %>
