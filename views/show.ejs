@@ -24,12 +24,12 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <p class="float-right"><a class="btn btn-primary" href="/products/<%= product._id %>/purchase">Buy now</a></p>
+                            
                             <form action="/cart" method="POST">
-                                <button>Buy</button>
+                                <button>Check out</button>
                             </form>
                             <form action="/products/<%= product._id %>/purchase" method="POST">
-                                <button>Buy now</button>
+                                <button>Add to cart</button>
                             </form>
                         </div>
                     </div>

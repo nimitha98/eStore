@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Product = require('./models/product');
-var Review = require('./models/review')
+var Cart = require('./models/cart')
 
 var data = [
     {
@@ -61,6 +61,18 @@ function seedDB(){
             });
         }
     });
+    // Cart.remove({}, function(err){
+    //     if(err){
+    //         console.log(err);
+    //     }
+    //     else{
+    //         Cart.create({}, function(err){
+    //             if(err){
+    //                 console.log(err);
+    //             }
+    //         })
+    //     }
+    // })
 }
 
 module.exports = seedDB;

@@ -66,17 +66,32 @@ app.post('/products/:id/purchase', function(req, res){
             //console.log(product);
             //var productArray = [];
             //productArray.push(product);
-            Cart.create({name : 'cart'}, function(err, cart){
+            Cart.find({}, function(err, cart){
                 if(err){
                     console.log(err);
                 }
-                else{
+                else if(cart === []){
                     console.log(product);
                     console.log(cart);
                     cart.products.push(product);
                     
                     cart.save();
                     res.redirect('/products/' + req.params.id);
+                }
+                else{
+                    Cart.create({}, function(err, cart){
+                        if(err){
+                            console.log(err);
+                        }
+                        else{
+                            console.log(product);
+                            console.log(cart);
+                            cart.products.push(product);
+                            
+                            cart.save();
+                            res.redirect('/products/' + req.params.id);
+                        }
+                    })
                 }
             })
         }
@@ -85,9 +100,9 @@ app.post('/products/:id/purchase', function(req, res){
 });
 
 app.get('/cart', function(req, res){
-    Cart.find({name : 'cart'}).populate('products').exec(function(err, items){
+    Cart.find({}).populate('products').exec(function(err, items){
         console.log(items);
-        res.render('cart', {items : items[0].products});
+        res.render('cart', {products : items[0].products});
     })
     //Cart.create
 });
