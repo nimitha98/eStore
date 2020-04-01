@@ -3,14 +3,19 @@ var mongoose = require('mongoose');
 var productSchema = new mongoose.Schema({
     name : String,
     image : String,
+    category : String,
     description : String,
-    comments : [
+    stock : Number,
+    price : Number,
+    reviews : [
         {
-            type : mongoose.Schema.Types.ObjectId,
-            ref : 'Review'
+            text : String,
+            user : {
+                type : mongoose.Schema.Types.ObjectId,
+                ref : 'User' 
+            }
         }
-    ],
-    stock : Number
+    ]
 });
 
 module.exports = mongoose.model("Product", productSchema);

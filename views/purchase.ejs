@@ -1,0 +1,12 @@
+<%- include('./partials/header') %>
+
+<h1>Purchase page!</h1>
+<form action="/products/<%= product._id %>/purchase" method="POST">
+
+<input type="radio" name="address" value="address1"><label for="address1">Address 1</label>
+<input type="radio" name="address" value="address2"><label for="address2"> Address 2</label>
+<button>Submit</button>
+
+</form>
+
+<%- include('./partials/footer') %>

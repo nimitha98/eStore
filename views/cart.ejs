@@ -1,0 +1,10 @@
+<%- include('./partials/header') %>
+
+<% items.forEach(function(item){ %>
+    <p><%= item.name %></p>
+<% }) %>
+<form action="/order" method="POST">
+    
+    <button>Submit</button>
+</form>
+<%- include('./partials/footer') %>
