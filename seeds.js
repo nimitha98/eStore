@@ -4,6 +4,7 @@ var Cart = require('./models/cart')
 
 var data = [
     {
+        //_id : '1',
         name: "Apple iPhone 11", 
         image: "https://images.unsplash.com/photo-1580466931754-def27bb0f188?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
         description: "Super fast ultra modern",
@@ -12,6 +13,7 @@ var data = [
         category : 'mobile'
     },
     {
+       // _id : '2',
         name: "Samsung Galaxy S20", 
         image: "https://images.unsplash.com/photo-1583573636255-6a41ff5523d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
         description: "Awesome camera",
@@ -20,6 +22,7 @@ var data = [
         category : 'mobile'
     },
     {
+        //_id : '3',
         name: "Google pixel", 
         image: "https://images.unsplash.com/photo-1520189123429-6a76abfe7906?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
         description: "Captures the world",

@@ -1,8 +1,8 @@
 <%- include('./partials/header') %>
 
-<% products.forEach(function(product){ %>
-    <p><%= product.name %></p>
-<% }) %>
+<% for(product in products){ %>
+    <p><%= products[product].price %></p>
+<% } %>
 <form action="/order" method="POST">
     
     <button>Submit</button>

@@ -4,6 +4,8 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var Product = require('./models/product');
 var Cart = require('./models/cart');
 var User = require('./models/user');
@@ -16,10 +18,12 @@ app.set('view engine', 'ejs');
 seedDB();
 
 //passport congfiguration
-app.use(require('express-session')({
+app.use(session({
     secret : "This is a secret message. Top secret in the world",
     resave : false,
-    saveUninitialized : false
+    saveUninitialized : false,
+    store : new MongoStore({ mongooseConnection : mongoose.connection}),
+    cookie : { maxAge : 180 * 60 * 1000 }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -29,6 +33,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(function(req, res, next){
     res.locals.currentUser = req.user;
+    res.locals.session = req.session;
     next();
 })
 
@@ -56,82 +61,97 @@ app.get('/products/:id', function(req, res){
     })
 });
 
-//buy product
-app.get('/products/:id/purchase', function(req, res){
-    //take user details and add to his purchases/orders - TBI
+//add item to cart
+app.get('/addtocart/:id', function(req, res){
+    //var cart = new Cart(req.session.cart ? req.session.cart : )
     Product.findById(req.params.id, function(err, product){
-        if(err){
-            console.log(err);
-        }
-        else{
-            if(product.stock <= 0)
-            {
-                //implement
-                res.redirect('/products/:id/purchase');
-            }
-            else{
-                res.render('purchase', {product : product});
-            }
-        }
-    })
-});
-
-app.post('/products/:id/purchase', function(req, res){
-    var address = req.body.address;
-    Product.findById(req.params.id, function(err, product){
-        if(err){
-            console.log(err);
-        }
-        else{
-            //console.log(product);
-            //var productArray = [];
-            //productArray.push(product);
-            Cart.find({}, function(err, cart){
-                if(err){
-                    console.log(err);
-                }
-                else if(cart === []){
-                    console.log(product);
-                    console.log(cart);
-                    cart.products.push(product);
-                    
-                    cart.save();
-                    res.redirect('/products/' + req.params.id);
-                }
-                else{
-                    Cart.create({}, function(err, cart){
-                        if(err){
-                            console.log(err);
-                        }
-                        else{
-                            console.log(product);
-                            console.log(cart);
-                            cart.products.push(product);
-                            
-                            cart.save();
-                            res.redirect('/products/' + req.params.id);
-                        }
-                    })
-                }
-            })
-        }
+        //var newCart = [{product._id : {price : product.price, quantity : 1}}];
+        var cart = new Cart(req.session.cart, product._id, product.price);
+        req.session.cart = cart;
+        console.log(cart);
+        console.log(req.session.cart);
+        res.redirect('/');
     });
-    //res.render('cart',{address : address});
 });
+//buy product
+// app.get('/products/:id/purchase', function(req, res){
+//     //take user details and add to his purchases/orders - TBI
+//     Product.findById(req.params.id, function(err, product){
+//         if(err){
+//             console.log(err);
+//         }
+//         else{
+//             if(product.stock <= 0)
+//             {
+//                 //implement
+//                 res.redirect('/products/:id/purchase');
+//             }
+//             else{
+//                 res.render('purchase', {product : product});
+//             }
+//         }
+//     })
+// });
+
+// app.post('/products/:id/purchase', function(req, res){
+//     var address = req.body.address;
+//     Product.findById(req.params.id, function(err, product){
+//         if(err){
+//             console.log(err);
+//         }
+//         else{
+//             //console.log(product);
+//             //var productArray = [];
+//             //productArray.push(product);
+//             Cart.find({}, function(err, cart){
+//                 if(err){
+//                     console.log(err);
+//                 }
+//                 else if(cart === []){
+//                     console.log(product);
+//                     console.log(cart);
+//                     cart.products.push(product);
+                    
+//                     cart.save();
+//                     res.redirect('/products/' + req.params.id);
+//                 }
+//                 else{
+//                     Cart.create({}, function(err, cart){
+//                         if(err){
+//                             console.log(err);
+//                         }
+//                         else{
+//                             console.log(product);
+//                             console.log(cart);
+//                             cart.products.push(product);
+                            
+//                             cart.save();
+//                             res.redirect('/products/' + req.params.id);
+//                         }
+//                     })
+//                 }
+//             })
+//         }
+//     });
+//     //res.render('cart',{address : address});
+// });
 
 app.get('/cart', function(req, res){
-    Cart.find({}).populate('products').exec(function(err, items){
-        console.log(items);
-        res.render('cart', {products : items[0].products});
-    })
+    // Cart.find({}).populate('products').exec(function(err, items){
+    //     console.log(items);
+    //     res.render('cart', {products : items[0].products});
+    // })
     //Cart.create
+    console.log(req.session.cart.products)
+    res.render('cart', { products : req.session.cart.products });
+
 });
 
 app.post('/cart', function(req, res){
     // Cart.find({}, function(err, items){
     //     res.render('cart', {items : items[0]});
     // })
-    res.redirect('/cart');
+    res.redirect('cart');
 });
 
 //AUTH routes
@@ -177,7 +197,6 @@ function isLoggedIn(req, res, next){
     }
     res.redirect('/login');
 }
-
 
 app.listen(3000, function(){
     console.log('eStore server started and running on port 3000');

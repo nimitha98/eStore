@@ -10,7 +10,7 @@ var userSchema = new mongoose.Schema({
     orders : [
         {
             placedOn : { type: Date, default: Date.now },
-            productId : {
+            product : {
                 type : mongoose.Schema.Types.ObjectId,
                 ref : 'Product'},
             estimatedDelivery : Date
@@ -23,6 +23,14 @@ var userSchema = new mongoose.Schema({
             country : String,
             state : String,
             zip : Number
+        }
+    ],
+    cart : [
+        {
+            product : {
+                    type : mongoose.Schema.Types.ObjectId,
+                    ref : 'Product'
+            }
         }
     ]
 });

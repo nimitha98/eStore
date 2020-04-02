@@ -25,12 +25,13 @@
                     <div class="row">
                         <div class="col-md-12">
                             
-                            <form action="/cart" method="POST">
+                            <!-- <form action="/cart" method="POST">
                                 <button>Check out</button>
-                            </form>
-                            <form action="/products/<%= product._id %>/purchase" method="POST">
-                                <button>Add to cart</button>
-                            </form>
+                            </form> -->
+                            <!-- <form action="/addtocart/<%= product._id %>" method="POST">
+                                <button class="btn btn-primary">Add to cart</button>
+                            </form> -->
+                            <a href="/addtocart/<%= product._id %>" class="btn btn-primary">Add to Cart</a>
                         </div>
                     </div>
                     <% product.reviews.forEach(function(review){ %>
