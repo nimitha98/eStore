@@ -46,36 +46,11 @@ function seedDB(){
                     }
                     else{
                         console.log("added a Product");
-                        // Review.create({
-                        //     text : "A simple review",
-                        //     author : {id: null,username: "John"}
-                        // }, function(err, review){
-                        //     if(err){
-                        //         console.log(err);
-                        //     }
-                        //     else{
-                        //         console.log("review added");
-                        //         product.comments.push(review);
-                        //         product.save();
-                        //     }
-                        // })
                     }
                 });
             });
         }
     });
-    // Cart.remove({}, function(err){
-    //     if(err){
-    //         console.log(err);
-    //     }
-    //     else{
-    //         Cart.create({}, function(err){
-    //             if(err){
-    //                 console.log(err);
-    //             }
-    //         })
-    //     }
-    // })
 }
 
 module.exports = seedDB;

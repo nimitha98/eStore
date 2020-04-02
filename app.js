@@ -63,9 +63,7 @@ app.get('/products/:id', function(req, res){
 
 //add item to cart
 app.get('/addtocart/:id', function(req, res){
-    //var cart = new Cart(req.session.cart ? req.session.cart : )
     Product.findById(req.params.id, function(err, product){
-        //var newCart = [{product._id : {price : product.price, quantity : 1}}];
         var cart = new Cart(req.session.cart, product._id, product.price);
         req.session.cart = cart;
         console.log(cart);
@@ -73,84 +71,14 @@ app.get('/addtocart/:id', function(req, res){
         res.redirect('/');
     });
 });
-//buy product
-// app.get('/products/:id/purchase', function(req, res){
-//     //take user details and add to his purchases/orders - TBI
-//     Product.findById(req.params.id, function(err, product){
-//         if(err){
-//             console.log(err);
-//         }
-//         else{
-//             if(product.stock <= 0)
-//             {
-//                 //implement
-//                 res.redirect('/products/:id/purchase');
-//             }
-//             else{
-//                 res.render('purchase', {product : product});
-//             }
-//         }
-//     })
-// });
 
-// app.post('/products/:id/purchase', function(req, res){
-//     var address = req.body.address;
-//     Product.findById(req.params.id, function(err, product){
-//         if(err){
-//             console.log(err);
-//         }
-//         else{
-//             //console.log(product);
-//             //var productArray = [];
-//             //productArray.push(product);
-//             Cart.find({}, function(err, cart){
-//                 if(err){
-//                     console.log(err);
-//                 }
-//                 else if(cart === []){
-//                     console.log(product);
-//                     console.log(cart);
-//                     cart.products.push(product);
-                    
-//                     cart.save();
-//                     res.redirect('/products/' + req.params.id);
-//                 }
-//                 else{
-//                     Cart.create({}, function(err, cart){
-//                         if(err){
-//                             console.log(err);
-//                         }
-//                         else{
-//                             console.log(product);
-//                             console.log(cart);
-//                             cart.products.push(product);
-                            
-//                             cart.save();
-//                             res.redirect('/products/' + req.params.id);
-//                         }
-//                     })
-//                 }
-//             })
-//         }
-//     });
-//     //res.render('cart',{address : address});
-// });
-
+//cart routes
 app.get('/cart', function(req, res){
-    // Cart.find({}).populate('products').exec(function(err, items){
-    //     console.log(items);
-    //     res.render('cart', {products : items[0].products});
-    // })
-    //Cart.create
     console.log(req.session.cart.products)
     res.render('cart', { products : req.session.cart.products });
-
 });
 
 app.post('/cart', function(req, res){
-    // Cart.find({}, function(err, items){
-    //     res.render('cart', {items : items[0]});
-    // })
     res.redirect('cart');
 });
 
