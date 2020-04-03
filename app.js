@@ -56,7 +56,7 @@ app.get('/products/:id', function(req, res){
             console.log(err);
         }
         else{
-            res.render('show', {product : product});
+            res.render('product/show', {product : product});
         }
     })
 });
@@ -64,7 +64,8 @@ app.get('/products/:id', function(req, res){
 //add item to cart
 app.get('/addtocart/:id', function(req, res){
     Product.findById(req.params.id, function(err, product){
-        var cart = new Cart(req.session.cart, product._id, product.price);
+        console.log(product);
+        var cart = new Cart(req.session.cart, product._id, product.price, product.name);
         req.session.cart = cart;
         console.log(cart);
         console.log(req.session.cart);
@@ -74,8 +75,13 @@ app.get('/addtocart/:id', function(req, res){
 
 //cart routes
 app.get('/cart', function(req, res){
-    console.log(req.session.cart.products)
-    res.render('cart', { products : req.session.cart.products });
+    //console.log(req.session.cart.products)
+    if(req.session.cart){
+        res.render('cart/items', { products : req.session.cart.products });
+    }
+    else{
+        res.render('cart/empty');
+    }
 });
 
 app.post('/cart', function(req, res){
@@ -84,7 +90,7 @@ app.post('/cart', function(req, res){
 
 //AUTH routes
 app.get('/register', function(req, res){
-    res.render('register');
+    res.render('user/register');
 })
 
 //sign up
@@ -92,7 +98,7 @@ app.post('/register', function(req, res){
     User.register(new User({username : req.body.username}), req.body.password, function(err, user){
         if(err){
             console.log(err);
-            return res.render('register');
+            return res.render('user/register');
         }
         passport.authenticate('local')(req, res, function(){
             res.redirect('/');
@@ -102,7 +108,7 @@ app.post('/register', function(req, res){
 
 //Login routes
 app.get('/login', function(req, res){
-    res.render('login');
+    res.render('user/login');
 });
 
 //login logic with middleware
@@ -116,6 +122,7 @@ app.post('/login', passport.authenticate('local', {
 //logout
 app.get('/logout', function(req, res){
     req.logout();
+    req.session.destroy();
     res.redirect('/');
 });
 
