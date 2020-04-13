@@ -14,7 +14,12 @@
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/cart">Cart</a>
+                        <a class="nav-link" href="/cart">
+                            Cart
+                            <% if(session.cart != undefined){ %>
+                                <span class="badge"><%= session.cart.totalQuantity %></span>
+                            <% } %>
+                        </a>
                     </li>
                     <% if(!currentUser) { %>
                         <li class="nav-item">

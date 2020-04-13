@@ -15,7 +15,7 @@ mongoose.connect('mongodb://localhost:27017/electronics',{useNewUrlParser : true
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
-seedDB();
+//seedDB();
 
 //passport congfiguration
 app.use(session({
@@ -64,19 +64,34 @@ app.get('/products/:id', function(req, res){
 //add item to cart
 app.get('/addtocart/:id', function(req, res){
     Product.findById(req.params.id, function(err, product){
-        console.log(product);
-        var cart = new Cart(req.session.cart, product._id, product.price, product.name);
+        //console.log(product);
+        console.log(req.session.cart, "cart");
+        var cart = new Cart(req.session.cart ? req.session.cart : {});
+        cart.add(product._id, product.price, product.name);
         req.session.cart = cart;
         console.log(cart);
         console.log(req.session.cart);
-        res.redirect('/');
+        res.redirect('back');
     });
 });
+
+app.get('/removefromcart/:id', function(req, res){
+    Product.findById(req.params.id, function(err, product){
+        console.log(product);
+        var cart = new Cart(req.session.cart);
+        cart.remove(product._id);
+        req.session.cart = cart;
+        console.log(cart);
+        console.log(req.session.cart);
+        res.redirect('/cart');
+    });
+});
+
 
 //cart routes
 app.get('/cart', function(req, res){
     //console.log(req.session.cart.products)
-    if(req.session.cart){
+    if(req.session.cart && req.session.cart.products){
         res.render('cart/items', { products : req.session.cart.products });
     }
     else{
