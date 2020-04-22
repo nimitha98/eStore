@@ -5,6 +5,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var methodOverride = require('method-override');
 var MongoStore = require('connect-mongo')(session);
 var Product = require('./models/product');
 var Cart = require('./models/cart');
@@ -15,6 +16,7 @@ mongoose.connect('mongodb://localhost:27017/electronics',{useNewUrlParser : true
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
+app.use(methodOverride('_method'));
 //seedDB();
 
 //passport congfiguration
@@ -39,6 +41,9 @@ app.use(function(req, res, next){
 
 //index page- show all products
 app.get('/', function(req, res){
+    res.redirect('/products');
+});
+app.get('/products', function(req, res){
     Product.find({}, function(err, products){
         if(err){
             console.log(err);
@@ -49,7 +54,32 @@ app.get('/', function(req, res){
     })
 });
 
-//individual product page
+//NEW product
+app.get('/products/new', checkForAdmin, function(req, res){
+    res.render('product/new');
+});
+
+//CREATE product and save in database
+app.post('/products', checkForAdmin, function(req, res){
+    var name = req.body.name;
+    var image = req.body.image;
+    var desc = req.body.description;
+    var price = parseInt(req.body.price);
+    var stock = parseInt(req.body.stock);
+    var category = req.body.category;
+    var newProduct = {name : name, image : image, description : desc, price: price, stock : stock, category: category};
+    
+    //add product to database
+    Product.create(newProduct, function(err, newEntry){
+        if(err){
+            console.log("Some problem", err);
+        }
+        else{
+            res.redirect('/');
+        }
+    }); 
+});
+//SHOW individual product page
 app.get('/products/:id', function(req, res){
     Product.findById(req.params.id, function(err, product){
         if(err){
@@ -59,6 +89,44 @@ app.get('/products/:id', function(req, res){
             res.render('product/show', {product : product});
         }
     })
+});
+
+//EDIT product
+app.get('/products/:id/edit', checkForAdmin, function(req, res){
+    Product.findById(req.params.id, function(err, foundProduct){
+        console.log(req.params.id, "from edit");
+        res.render('product/edit', {product : foundProduct});  
+    });
+});
+
+//UPDATE product
+app.put('/products/:id', checkForAdmin, function(req, res){
+    var product = req.body.product;
+    product.price = parseInt(product.price);
+    product.stock = parseInt(product.stock);
+    Product.findByIdAndUpdate(req.params.id, product, function(err, updatedProduct){
+        console.log(req.params.id, "from update");
+        //console.log(req.body.product);
+        //console.log(updatedProduct);
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.redirect('/products/' + req.params.id);
+        }
+    });
+});
+
+//DESTROY product
+app.delete('/products/:id', checkForAdmin, function(req, res){
+    Product.findByIdAndDelete(req.params.id, function(err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.redirect('/');
+        }
+    });
 });
 
 //add item to cart
@@ -92,7 +160,7 @@ app.get('/removefromcart/:id', function(req, res){
 app.get('/cart', function(req, res){
     //console.log(req.session.cart.products)
     if(req.session.cart && req.session.cart.products){
-        res.render('cart/items', { products : req.session.cart.products });
+        res.render('cart/items', { products : req.session.cart.products, totalPrice : req.session.cart.totalPrice });
     }
     else{
         res.render('cart/empty');
@@ -146,6 +214,21 @@ function isLoggedIn(req, res, next){
         return next();
     }
     res.redirect('/login');
+}
+
+function checkForAdmin(req, res, next){
+    if(req.isAuthenticated()){
+        if(req.user.username == 'admin'){
+            //console.log(req.user.username);
+            next();
+        }
+        else{
+            res.redirect('back');
+        }
+    }
+    else{
+        res.redirect('back');
+    }  
 }
 
 app.listen(3000, function(){

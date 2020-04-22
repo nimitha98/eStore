@@ -17,6 +17,12 @@
                     <h4 class="float-right">$<%= product.price %></h4>
                     <a href=""><h4 class="card-title"><%= product.name %></h4></a>
                     <p class="card-text"><%= product.description %></p>
+                    <% if(currentUser && currentUser.username == 'admin') { %>
+                        <a class="btn btn-warning" href="/products/<%= product._id %>/edit">Edit</a>
+                        <form class="delete-form" action="/products/<%= product._id %>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    <% } %>
                 </div>
             </div>
             <hr>

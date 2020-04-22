@@ -6,6 +6,10 @@
             <h1>Welcome to Electronics Store</h1>
         </header>
     </div>
+    <% if(currentUser && currentUser.username == 'admin') { %>
+        <a class="btn btn-warning" href="/products/new">Add</a>
+        
+    <% } %>
     <div class="container">
         <div class="row">
             <% products.forEach(function(product){ %>
