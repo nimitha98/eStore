@@ -3,6 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 var Product = require('../models/product');
 var Cart = require('../models/cart');
+var Order = require('../models/order');
 
 //add item to cart
 router.get('/addtocart/:id', function(req, res){
@@ -45,5 +46,44 @@ router.get('/cart', function(req, res){
 router.post('/cart', function(req, res){
     res.redirect('cart');
 });
+
+//checkout routes
+router.get('/checkout', isLoggedIn, function(req, res){
+    if(!req.session.cart){
+        return res.redirect('/cart');
+    }
+
+    res.render('cart/checkout');
+});
+
+router.post('/checkout', isLoggedIn, function(req, res, next) {
+    if (!req.session.cart) {
+        return res.redirect('/shopping-cart');
+    }
+    var cart = new Cart(req.session.cart);
+    var order = new Order({
+        user: req.user,
+        cart: cart,
+        address: req.body.address,
+        name: req.body.name,
+    });
+
+    order.save(function(err, result) {
+        if(err){
+            console.log(err);
+        }
+        else{
+            req.session.cart = null;
+            res.redirect('/');
+        }
+    });
+});
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect('/login');
+}
 
 module.exports = router;

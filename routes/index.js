@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var User = require('../models/user');
+var Order = require('../models/order');
+var Cart = require('../models/cart');
 
 //AUTH routes
 router.get('/register', function(req, res){
@@ -39,6 +41,23 @@ router.get('/logout', function(req, res){
     req.logout();
     req.session.destroy();
     res.redirect('/');
+});
+
+//user profile
+router.get('/profile', isLoggedIn, function (req, res, next) {
+    Order.find({user: req.user}, function(err, orders) {
+        if (err) {
+            return res.write('Error!');
+        }
+        var cart;
+        var allOrders = [];
+        orders.forEach(function(order) {
+            cart = new Cart(order.cart);
+            allOrders.push(cart);
+        });
+        console.log(allOrders);
+        res.render('user/profile', { orders : allOrders });
+    });
 });
 
 function isLoggedIn(req, res, next){
