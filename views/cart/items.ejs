@@ -11,11 +11,16 @@
             <% for(product in products){ %>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                 <div>
-                    <h6 class="my-0"><%= products[product].name %></h6>
+                    <h5 class="my-0"><%= products[product].name %></h5>
                     <!-- <small class="text-muted">Brief description</small> -->
                     <small >Quantity <%= products[product].quantity %></small>
-                    <a href="/addtocart/<%= product %>" class="btn btn-primary btn-sm">Add</a>
-                    <a href="/removefromcart/<%= product %>" class="btn btn-primary btn-sm">Remove</a>
+                    
+                    <div>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <a href="/addtocart/<%= product %>" class="btn btn-primary btn-sm">Add</a>
+                            <a href="/removefromcart/<%= product %>" class="btn btn-danger btn-sm">Remove</a>
+                        </div>
+                    </div>
                 </div>
                 <span class="text-muted">$<%= products[product].price %></span>
                 </li>

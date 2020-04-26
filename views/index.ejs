@@ -12,18 +12,40 @@
     <div class="container">
         <div class="row">
             <% products.forEach(function(product){ %>
-                <div class="col-lg-3 col-md-4 col-sm-6 column">
-                    <div class="card">
+                <div class="col-6 col-md-4 col-lg-3">
+                    <!-- Card -->
+                    <div class="card mb-7">
+                      <!-- Image -->
+                      <div class="card-img">
+                        <!-- Image -->
+                        <a class="card-img-hover" href="/products/<%= product._id %>">
+                          <img id = 'productsImage' class="card-img-top card-img-front" src="<%= product.image %>" alt="...">
+                        </a>
+                        <!-- Actions -->
+                      </div>
+                      <!-- Body -->
+                      <div class="card-body px-0">
+                        <!-- Category -->
+                        <div class="font-size-xs">
+                          <p class="text-muted"><%= product.category %></p>
+                        </div>
+                        <!-- Title -->
+                        <div class="font-weight-bold">
+                          <a class="text-body" href="/products/<%= product._id %>">
+                            <%= product.name %>
+                          </a>
+                        </div>
+                        <!-- Price -->
+                        <div class="font-weight-bold text-muted">
+                            $<%= product.price %>
+                        </div>
                         <div>
-                            <img class="card-img-top img-fluid" src="<%= product.image %>" alt="">
+                            <a href="/products/<%= product._id %>" class="btn btn-outline-info btn-sm">Show Info</a>
+                            <a href="/addtocart/<%= product._id %>" class="btn btn-primary btn-sm">Add to Cart</a>
                         </div>
-                        <div class="card-body text-center">
-                            <h5 class="card-text"><%= product.name %></h5>
-                            <p class="price">$<%= product.price %></p>
-                            <a href="/products/<%= product._id %>" class="btn btn-primary">Show Info</a>
-                        </div>
+                      </div>
                     </div>
-                </div>
+                  </div>
             <% }) %>   
         </div>     
     </div>
