@@ -6,8 +6,8 @@ var Cart = require('../models/cart');
 var Order = require('../models/order');
 
 //add item to cart
-router.get('/addtocart/:id', function(req, res){
-    Product.findById(req.params.id, function(err, product){
+router.get('/addtocart/:id', function (req, res) {
+    Product.findById(req.params.id, function (err, product) {
         //console.log(product);
         console.log(req.session.cart, "cart");
         var cart = new Cart(req.session.cart ? req.session.cart : {});
@@ -19,8 +19,8 @@ router.get('/addtocart/:id', function(req, res){
     });
 });
 
-router.get('/removefromcart/:id', function(req, res){
-    Product.findById(req.params.id, function(err, product){
+router.get('/removefromcart/:id', function (req, res) {
+    Product.findById(req.params.id, function (err, product) {
         console.log(product);
         var cart = new Cart(req.session.cart);
         cart.remove(product._id);
@@ -33,30 +33,30 @@ router.get('/removefromcart/:id', function(req, res){
 
 
 //cart routes
-router.get('/cart', function(req, res){
+router.get('/cart', function (req, res) {
     //console.log(req.session.cart.products)
-    if(req.session.cart && req.session.cart.products){
-        res.render('cart/items', { products : req.session.cart.products, totalPrice : req.session.cart.totalPrice });
+    if (req.session.cart && req.session.cart.products) {
+        res.render('cart/items', { products: req.session.cart.products, totalPrice: req.session.cart.totalPrice });
     }
-    else{
+    else {
         res.render('cart/empty');
     }
 });
 
-router.post('/cart', function(req, res){
+router.post('/cart', function (req, res) {
     res.redirect('cart');
 });
 
 //checkout routes
-router.get('/checkout', isLoggedIn, function(req, res){
-    if(!req.session.cart){
+router.get('/checkout', isLoggedIn, function (req, res) {
+    if (!req.session.cart) {
         return res.redirect('/cart');
     }
 
     res.render('cart/checkout');
 });
 
-router.post('/checkout', isLoggedIn, function(req, res, next) {
+router.post('/checkout', isLoggedIn, function (req, res, next) {
     if (!req.session.cart) {
         return res.redirect('/shopping-cart');
     }
@@ -68,19 +68,19 @@ router.post('/checkout', isLoggedIn, function(req, res, next) {
         name: req.body.name,
     });
 
-    order.save(function(err, result) {
-        if(err){
+    order.save(function (err, result) {
+        if (err) {
             console.log(err);
         }
-        else{
+        else {
             req.session.cart = null;
             res.redirect('/');
         }
     });
 });
 
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
         return next();
     }
     res.redirect('/login');
