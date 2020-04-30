@@ -5,18 +5,42 @@ var Product = require('../models/product');
 
 //index page- show all products
 router.get('/', function (req, res) {
-    res.redirect('/products');
+    res.redirect('/products/1');
 });
+// router.get('/products', function (req, res) {
+//     Product.find({}, function (err, products) {
+//         if (err) {
+//             console.log(err);
+//         }
+//         else {
+//             res.render('index', { products: products });
+//         }
+//     })
+// });
 router.get('/products', function (req, res) {
-    Product.find({}, function (err, products) {
-        if (err) {
-            console.log(err);
-        }
-        else {
-            res.render('index', { products: products });
-        }
-    })
+    res.redirect('/products/1');
 });
+
+
+router.get('/products/:page', function (req, res, next) {
+    var perPage = 4
+    var page = req.params.page || 1
+
+    Product
+        .find({})
+        .skip((perPage * page) - perPage)
+        .limit(perPage)
+        .exec(function (err, products) {
+            Product.count().exec(function (err, count) {
+                if (err) return next(err)
+                res.render('index', {
+                    products: products,
+                    current: page,
+                    pages: Math.ceil(count / perPage)
+                })
+            })
+        })
+})
 
 //NEW product
 router.get('/products/new', checkForAdmin, function (req, res) {
@@ -142,15 +166,41 @@ router.get("/search", function (req, res) {
     console.log("Category : " + category);
     console.log("Name : " + name);
     console.log("Query : " + query);
-    Product.find(query, function (err, products) {
-        if (err) {
-            console.log(err);
-        }
-        else {
-            console.log(products);
-            res.json(products);
-        }
-    })
+    // Product.find(query, function (err, products) {
+    //     if (err) {
+    //         console.log(err);
+    //     }
+    //     else {
+    //         console.log(products);
+    //         res.json(products);
+    //     }
+    // })
+
+    var perPage = 4
+    var page = req.params.page || 1
+
+
+
+    Product
+        .find(query)
+        .skip((perPage * page) - perPage)
+        .limit(perPage)
+        .exec(function (err, products) {
+            Product.count().exec(function (err, count) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    var data = {
+                        products: products,
+                        current: page,
+                        pages: Math.ceil(count / perPage)
+                    };
+
+                    res.json(data);
+                }
+            })
+        })
 });
 
 module.exports = router;
