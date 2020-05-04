@@ -5,7 +5,7 @@ var Product = require('../models/product');
 
 //index page- show all products
 router.get('/', function (req, res) {
-    res.redirect('/products/1');
+    res.redirect('/productspaging/1');
 });
 // router.get('/products', function (req, res) {
 //     Product.find({}, function (err, products) {
@@ -18,11 +18,11 @@ router.get('/', function (req, res) {
 //     })
 // });
 router.get('/products', function (req, res) {
-    res.redirect('/products/1');
+    res.redirect('/productspaging/1');
 });
 
 
-router.get('/products/:page', function (req, res, next) {
+router.get('/productspaging/:page', function (req, res, next) {
     var perPage = 4
     var page = req.params.page || 1
 
@@ -176,7 +176,7 @@ router.get("/search", function (req, res) {
     //     }
     // })
 
-    var perPage = 4
+    var perPage = 4;
     var page = req.params.page || 1
 
 
