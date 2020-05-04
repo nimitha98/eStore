@@ -26,6 +26,7 @@ router.get('/productspaging/:page', function (req, res, next) {
     var perPage = 4
     var page = req.params.page || 1
 
+
     Product
         .find({})
         .skip((perPage * page) - perPage)
@@ -145,27 +146,27 @@ function checkForAdmin(req, res, next) {
 router.get("/search", function (req, res) {
     var name = req.query["title"];
     var category = req.query["category"];
-    console.log("Title : " + name);
-    console.log("Category : " + category);
+    // console.log("Title : " + name);
+    // console.log("Category : " + category);
     var query = {};
     if (
         (category === "All" || category === undefined) &&
         (name === undefined || name === "")
     ) {
-        console.log("both empty !!");
+        //  console.log("both empty !!");
     } else if (category === "All" || category === undefined) {
-        console.log("category undefined");
+        // console.log("category undefined");
         query = { name: { $regex: name, $options: "i" } };
     } else if (name === undefined || name === "") {
-        console.log("name undefined");
+        // console.log("name undefined");
         query = { category: { $regex: category, $options: "i" } };
     } else {
-        console.log("both defined");
+        // console.log("both defined");
         query = { name: { $regex: name, $options: "i" }, category: { $regex: category, $options: "i" } };
     }
-    console.log("Category : " + category);
-    console.log("Name : " + name);
-    console.log("Query : " + query);
+    //console.log("Category : " + category);
+    //console.log("Name : " + name);
+    //console.log("Query : " + query);
     // Product.find(query, function (err, products) {
     //     if (err) {
     //         console.log(err);
@@ -176,7 +177,7 @@ router.get("/search", function (req, res) {
     //     }
     // })
 
-    var perPage = 4;
+    var perPage = 2;
     var page = req.params.page || 1
 
 
@@ -191,6 +192,9 @@ router.get("/search", function (req, res) {
                     console.log(err);
                 }
                 else {
+                    console.log(products);
+                    console.log(page);
+                    console.log(count / perPage);
                     var data = {
                         products: products,
                         current: page,

@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
 var passport = require('passport');
+var fs = require('fs');
 var LocalStrategy = require('passport-local');
 var bodyParser = require('body-parser');
 var session = require('express-session');
@@ -9,10 +10,12 @@ var methodOverride = require('method-override');
 var MongoStore = require('connect-mongo')(session);
 var User = require('./models/user');
 var seedDB = require('./seeds');
+var multer = require('multer');
 
 var productRouter = require('./routes/product');
 var indexRouter = require('./routes/index');
 var cartRouter = require('./routes/cart');
+var flash = require('connect-flash');
 
 mongoose.connect('mongodb://localhost:27017/electronics', { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -30,6 +33,7 @@ app.use(session({
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
     cookie: { maxAge: 180 * 60 * 1000 }
 }));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
@@ -45,6 +49,7 @@ app.use(function (req, res, next) {
 app.use(productRouter);
 app.use(indexRouter);
 app.use(cartRouter);
+
 
 app.listen(3000, function () {
     console.log('eStore server started and running on port 3000');

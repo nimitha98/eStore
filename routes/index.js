@@ -14,21 +14,38 @@ router.get('/register', function (req, res) {
 })
 
 //sign up
-router.post('/register', function (req, res) {
-    User.register(new User({ username: req.body.username }), req.body.password, function (err, user) {
+// router.post('/register', function (req, res) {
+//     User.register(new User({ username: req.body.username }), req.body.password, function (err, user) {
+//         if (err) {
+//             console.log(err);
+//             return res.render('user/register');
+//         }
+//         passport.authenticate('local')(req, res, function () {
+//             res.redirect('/');
+//         });
+//     });
+// });
+
+
+
+router.post('/signup', function (req, res) {
+
+    Users = new User({ email: req.body.email, username: req.body.username });
+
+    User.register(Users, req.body.password, function (err, user) {
         if (err) {
-            console.log(err);
-            return res.render('user/register');
+            res.json({ success: false, message: "Your account could  not be saved. Error: " + err });
+        } else {
+            res.json({ success: true, message: "Your account has  been saved" });
         }
-        passport.authenticate('local')(req, res, function () {
-            res.redirect('/');
-        });
     });
 });
 
 //Login routes
 router.get('/login', function (req, res) {
     res.render('user/login');
+    // console.log(req.flash('loginMessage'));
+    // res.render('user/login', { message: req.flash('loginMessage') });
 });
 
 //login logic with middleware
@@ -68,73 +85,97 @@ router.get('/profile', isLoggedIn, function (req, res, next) {
 
 //signup 
 router.get("/signup", function (req, res) {
-    res.render("signup", { title: "Signup Page" });
+    res.render("user/signup", { title: "Signup Page" });
 });
 
 //signup post request
-router.post("/signup", function (req, res) {
+// router.post("/signup", function (req, res) {
+// console.log("In signup");
+// var db = mongoose.connection;
+// db.collection("users")
+//     .find({ email: req.body.email })
+//     .toArray(function (err, result) {
+//         if (err) {
+//             console.log("Error : " + err);
+//             //db.close();
+//         } else {
+//             console.log(result);
+//             console.log(result.length);
+//             var len = result.length;
+//             if (len !== 0) {
+//                 console.log("found");
+//                 res.json({
+//                     message: "A user with that email has already registered.",
+//                     status: "error",
+//                 });
+//                 //db.close();
+//             } else {
+//                 console.log("Not found");
+//                 var name = req.body.username;
+//                 var email = req.body.email;
+//                 var password = bcrypt.hashSync(req.body.password, 10);
 
-    // var db = mongoose.connection;
-    // db.collection("users")
-    //     .find({ email: req.body.email })
-    //     .toArray(function (err, result) {
-    //         if (err) {
-    //             console.log("Error : " + err);
-    //             //db.close();
-    //         } else {
-    //             //console.log(result);
-    //             //console.log(result.length);
-    //             var len = result.length;
-    //             if (len !== 0) {
-    //                 console.log("found");
-    //                 res.json({
-    //                     message: "A user with that email has already registered.",
-    //                     status: "error",
-    //                 });
-    //                 //db.close();
-    //             } else {
-    //                 console.log("Not found");
-    //                 var name = req.body.username;
-    //                 var email = req.body.email;
-    //                 var password = bcrypt.hashSync(req.body.password, 10);
+//                 var data = {
+//                     username: name,
+//                     email: email,
+//                     password: password,
+//                 };
+//                 db.collection("users").insertOne(data, function (err, doc) {
+//                     if (err) {
+//                         console.log("Unexpected Error :" + err);
+//                         res.json({
+//                             message: "Unexpected error occured while creating account",
+//                             status: "error",
+//                         });
+//                         // db.close();
+//                     } else {
+//                         console.log("document added to collection");
+//                         res.json({
+//                             message: "Account created successfully.",
+//                             status: "success",
+//                         });
+//                         // db.close();
+//                     }
+//                 });
+//             }
+//         }
+//         // db.close();
+//     });
 
-    //                 var data = {
-    //                     username: name,
-    //                     email: email,
-    //                     password: password,
-    //                 };
-    //                 db.collection("users").insertOne(data, function (err, doc) {
-    //                     if (err) {
-    //                         console.log("Unexpected Error :" + err);
-    //                         res.json({
-    //                             message: "Unexpected error occured while creating account",
-    //                             status: "error",
-    //                         });
-    //                         // db.close();
-    //                     } else {
-    //                         console.log("document added to collection");
-    //                         res.json({
-    //                             message: "Account created successfully.",
-    //                             status: "success",
-    //                         });
-    //                         // db.close();
-    //                     }
-    //                 });
-    //             }
-    //         }
-    //         // db.close();
-    //     });
+// User.register(new User({ username: req.body.username }), req.body.password, function (err, user) {
+//     if (err) {
+//         console.log(err);
+//         return res.render('signup');
+//     }
+//     passport.authenticate('local')(req, res, function () {
+//         console.log("In signup !");
+//         res.redirect('/');
+//     });
+// });
 
-    User.register(new User({ username: req.body.username }), req.body.password, function (err, user) {
-        if (err) {
-            console.log(err);
-            return res.render('signup');
-        }
-        passport.authenticate('local')(req, res, function () {
-            res.redirect('/');
-        });
-    });
-});
+
+
+//     User.register(new User({ username: req.body.username }), req.body.password, function (err, user) {
+//         if (err) {
+//             //console.log(err);
+//             return res.render('signup');
+//         }
+//         passport.authenticate('local', function (err, user, info) {
+//             console.log("Passport ///////////////////////");
+//             if (err) { return next(err) }
+//             if (!user) {
+//                 // *** Display message without using flash option
+//                 // re-render the login form with a message
+
+//                 console.log("This is the info message");
+//                 console.log("///////////////////////////////////////////////////////");
+//                 console.log(info.message);
+//                 return res.render('signup', { message: info.message })
+//             }
+//         });
+//     });
+
+// });
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {

@@ -4,15 +4,20 @@
 <head>
     <title>eStore</title>
     <link rel="stylesheet" href="/stylesheets/main.css">
+    <link rel="stylesheet" href="/stylesheets/signup.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+    <script src="/javascripts/signup.js"></script>
     <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
     <script>
         $(document).ready(function (e) {
+
             $("#search").click(function () {
                 var cat = $("#ddlViewBy :selected").text();
                 var tit = $("#titlesearch").val();
@@ -23,7 +28,8 @@
                     type: "GET",
                     data: { title: tit, category: cat },
                     success: function (data) {
-                        //console.log("Data : " + data);
+                        console.log("Data : " + data.pages);
+                        console.log("Data : " + data.current);
                         $("#products").empty();
                         $(data.products).each(function (i, product) {
                             console.log(product.image);
