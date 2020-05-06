@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
+var flash = require('connect-flash');
 var passport = require('passport');
 var fs = require('fs');
 var LocalStrategy = require('passport-local');
@@ -15,7 +16,7 @@ var multer = require('multer');
 var productRouter = require('./routes/product');
 var indexRouter = require('./routes/index');
 var cartRouter = require('./routes/cart');
-var flash = require('connect-flash');
+
 
 mongoose.connect('mongodb://localhost:27017/electronics', { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -43,6 +44,8 @@ passport.deserializeUser(User.deserializeUser());
 app.use(function (req, res, next) {
     res.locals.currentUser = req.user;
     res.locals.session = req.session;
+	res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
     next();
 })
 

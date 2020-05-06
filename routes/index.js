@@ -43,15 +43,18 @@ router.post('/signup', function (req, res) {
 
 //Login routes
 router.get('/login', function (req, res) {
-    res.render('user/login');
+    //res.render('user/login');
     // console.log(req.flash('loginMessage'));
     // res.render('user/login', { message: req.flash('loginMessage') });
+
+    res.render('user/login', { message: req.flash('error', 'Either username or password is incorrect') });
 });
 
 //login logic with middleware
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/login'
+    failureRedirect: '/login',
+    failureFlash: true
 }), function (req, res, err) {
     if (err) {
         console.log(err);

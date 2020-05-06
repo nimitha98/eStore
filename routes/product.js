@@ -3,6 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 var Product = require('../models/product');
 
+
 //index page- show all products
 router.get('/', function (req, res) {
     res.redirect('/productspaging/1');
@@ -41,6 +42,8 @@ router.get('/productspaging/:page', function (req, res, next) {
                 })
             })
         })
+
+    //res.redirect('/search');
 })
 
 //NEW product
@@ -55,6 +58,7 @@ router.post('/products', checkForAdmin, function (req, res) {
     var desc = req.body.description;
     var price = parseInt(req.body.price);
     var stock = parseInt(req.body.stock);
+
     var category = req.body.category;
     var newProduct = { name: name, image: image, description: desc, price: price, stock: stock, category: category };
 
@@ -108,13 +112,29 @@ router.put('/products/:id', checkForAdmin, function (req, res) {
 
 //DESTROY product
 router.delete('/products/:id', checkForAdmin, function (req, res) {
-    Product.findByIdAndDelete(req.params.id, function (err) {
-        if (err) {
-            console.log(err);
-        }
-        else {
-            res.redirect('/');
-        }
+    // Product.findByIdAndDelete(req.params.id, function (err) {
+    //     if (err) {
+    //         console.log(err);
+    //     }
+    //     else {
+    //         res.redirect('/');
+    //     }
+    // });
+    //Implement soft delete
+    Product.findById(req.params.id, function (err, foundProduct) {
+        console.log(req.params.id, "from delete");
+        //console.log(req.body.product);
+        //console.log(updatedProduct);
+        foundProduct.unlist = true;
+        foundProduct.save(function (err, updatedProduct) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                console.log(updatedProduct);
+                res.redirect('/');
+            }
+        });
     });
 });
 
@@ -164,20 +184,7 @@ router.get("/search", function (req, res) {
         // console.log("both defined");
         query = { name: { $regex: name, $options: "i" }, category: { $regex: category, $options: "i" } };
     }
-    //console.log("Category : " + category);
-    //console.log("Name : " + name);
-    //console.log("Query : " + query);
-    // Product.find(query, function (err, products) {
-    //     if (err) {
-    //         console.log(err);
-    //     }
-    //     else {
-    //         console.log(products);
-    //         res.json(products);
-    //     }
-    // })
-
-    var perPage = 2;
+    var perPage = 4;
     var page = req.params.page || 1
 
 

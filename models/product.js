@@ -15,7 +15,8 @@ var productSchema = new mongoose.Schema({
                 ref: 'User'
             }
         }
-    ]
+    ],
+    unlist : Boolean
 });
 
 module.exports = mongoose.model("Product", productSchema);

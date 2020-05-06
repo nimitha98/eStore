@@ -4,7 +4,6 @@ var passportLocalMongoose = require('passport-local-mongoose');
 var userSchema = new mongoose.Schema({
     firstname: String,
     lastname: String,
-    full_name: String,
     phone: String,
     username: String,
     email: String,

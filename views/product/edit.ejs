@@ -19,9 +19,30 @@
             <div class="form-group">
                 <input class="form-control" type="text" name="product[stock]" value="<%= product.stock %>">
             </div>
-            <div class="form-group">
-                <input class="form-control" type="text" name="product[category]" value="<%= product.category %>">
-            </div>
+            <div class="form-group" id="mySelect">
+                <select name="product[category]" class="form-control"> 
+                    <% if(product.category == 'mobile') { %>
+                        <option value="mobile" selected>Mobile</option>
+                    <% } else { %>
+                        <option value="mobile">Mobile</option>
+                    <% } %>
+                    <% if(product.category == 'laptop') { %>
+                        <option value="laptop" selected>Laptop</option>
+                    <% } else { %>
+                        <option value="laptop">Laptop</option>
+                    <% } %>
+                    <% if(product.category == 'camera') { %>
+                        <option value="camera" selected>Camera</option>
+                    <% } else { %>
+                        <option value="camera">Camera</option>
+                    <% } %>
+                    <% if(product.category == 'television') { %>
+                        <option value="television" selected>Television</option>
+                    <% } else { %>
+                        <option value="television">Television</option>
+                    <% } %>
+                </select>
+		    </div>
             <div class="form-group">
                 <button class="btn btn-primary btn-block">Submit</button>
             </div>  
