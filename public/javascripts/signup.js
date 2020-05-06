@@ -13,7 +13,7 @@ $(function () {
         var cpassword = $("#password2").val();
         var emailRegex = /^[A-Za-z0-9.]+@[A-Z0-9a-z.-]+\.[A-Za-z]{2,}$/;
         var passwordRegex = /\d/;
-        $("#msg").show();
+        // $("#msg").show();
         if (!username || !email || !password || !cpassword) {
             $("#msg").show().html("All fields are required.");
         } else if (!email.match(emailRegex)) {

@@ -34,7 +34,7 @@
                         $(data.products).each(function (i, product) {
                             console.log(product.image);
                             var prod = '<div class="col-6 col-md-4 col-lg-3"> <div class="card mb-7"> <div class="card-img"><a class="card-img-hover" href="/products/' + product._id + '">';
-                            prod += "<img id='productsImage' class='card-img-top card-img-front' src=" + product.image + '"alt="..."></a></div>';
+                            prod += "<img id='productsImage' class='card-img-top card-img-front' src=" + "/" + product.image + '"alt="..."></a></div>';
                             prod += '<div class="card-body px-0"><div class="font-size-xs"><p class="text-muted">' + product.category + '</p></div>';
                             prod += ' <div class="font-weight-bold"><a class="text-body" href="/products/' + product._id + '">' + product.name + '</a></div>';
                             prod += '<div class="font-weight-bold text-muted">$' + product.price + '</div><div><a href="/products/' + product._id + '" class="btn btn-outline-info btn-sm">Show Info</a><a href="/addtocart/' + product._id + '" class="btn btn-primary btn-sm">Add to Cart</a></div></div></div></div>';

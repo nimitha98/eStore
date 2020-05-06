@@ -2,7 +2,19 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var Product = require('../models/product');
+var multer = require('multer');
 
+var storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './public/images');
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.originalname);
+
+    }
+});
+
+var upload = multer({ storage: storage });
 
 //index page- show all products
 router.get('/', function (req, res) {
@@ -52,13 +64,20 @@ router.get('/products/new', checkForAdmin, function (req, res) {
 });
 
 //CREATE product and save in database
-router.post('/products', checkForAdmin, function (req, res) {
+router.post('/products', upload.single('mypic'), checkForAdmin, function (req, res) {
+
     var name = req.body.name;
-    var image = req.body.image;
+    console.log("name : " + name);
+    var image = req.body.name + '.jpg';
     var desc = req.body.description;
     var price = parseInt(req.body.price);
     var stock = parseInt(req.body.stock);
-
+    console.log("Price : " + price);
+    console.log("Stock : " + stock);
+    console.log("image : " + image);
+    console.log("desc : " + desc);
+    console.log("Price : " + parseInt(price));
+    console.log("Stock : " + parseInt(stock));
     var category = req.body.category;
     var newProduct = { name: name, image: image, description: desc, price: price, stock: stock, category: category };
 
@@ -93,8 +112,9 @@ router.get('/products/:id/edit', checkForAdmin, function (req, res) {
 });
 
 //UPDATE product
-router.put('/products/:id', checkForAdmin, function (req, res) {
+router.put('/products/:id', upload.single('product[image]'), checkForAdmin, function (req, res) {
     var product = req.body.product;
+    product.image = product.name + ".jpg";
     product.price = parseInt(product.price);
     product.stock = parseInt(product.stock);
     Product.findByIdAndUpdate(req.params.id, product, function (err, updatedProduct) {
