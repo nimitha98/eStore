@@ -1,0 +1,31 @@
+<%- include("../partials/header") %>
+
+
+<div class="container" style=" padding: 30px;">
+    <h1 style="text-align: center;">Sign Up</h1>
+    <div style="width:50%; margin: 25px auto;">
+        <form action="/signup" method="post">
+            <p>Please fill in this form to create an account.</p>
+            <hr>
+            <div class="alert alert-danger alert-dismissible" id="msg">
+            </div>
+            <label for="username"><b>User Name</b></label>
+            <input type="text" class="form-control" placeholder="Enter username" name="username" id="username">
+
+            <label for="email"><b>Email</b></label>
+            <input type="text" class="form-control" placeholder="Enter Email" name="email" id="email">
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" class="form-control" placeholder="Enter Password" name="password" id="password">
+
+            <label for="psw-repeat"><b>Repeat Password</b></label>
+            <input type="password" class="form-control" placeholder="Repeat Password" name="password2" id="password2">
+            <div class="clearfix" style="margin-top:20px;">
+                <button type="button" class="cancelbtn">Cancel</button>
+                <button type="submit" class="signupbtn" id="signup">Sign Up</button>
+            </div>
+            <a href="/Login">Already have account?Login</a>
+        </form>
+    </div>
+</div>
+<%- include("../partials/footer") %>

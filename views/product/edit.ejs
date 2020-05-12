@@ -1,0 +1,114 @@
+<%- include('../partials/header') %>
+
+<!-- <div class="container">
+    <h1 style="text-align: center;">Edit Product</h1>
+    <div style="width:30%; margin: 25px auto">
+        <form action="/products/<%= product._id %>?_method=PUT" method="POST">
+            <div class="form-group">
+                <input class="form-control" type="text" name="product[name]" value="<%= product.name %>">
+            </div>
+            <div class="form-group">
+                <span><b>Upload Image:</b></span>
+                <input type="file" name="mypic" id="mypic" required /> <br>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="product[description]" value="<%= product.description %>">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="product[price]" value="<%= product.price %>">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="product[stock]" value="<%= product.stock %>">
+            </div>
+            <div class="form-group" id="mySelect">
+                <select name="product[category]" class="form-control">
+                    <% if(product.category == 'mobile') { %>
+                    <option value="mobile" selected>Mobile</option>
+                    <% } else { %>
+                    <option value="mobile">Mobile</option>
+                    <% } %>
+                    <% if(product.category == 'laptop') { %>
+                    <option value="laptop" selected>Laptop</option>
+                    <% } else { %>
+                    <option value="laptop">Laptop</option>
+                    <% } %>
+                    <% if(product.category == 'camera') { %>
+                    <option value="camera" selected>Camera</option>
+                    <% } else { %>
+                    <option value="camera">Camera</option>
+                    <% } %>
+                    <% if(product.category == 'television') { %>
+                    <option value="television" selected>Television</option>
+                    <% } else { %>
+                    <option value="television">Television</option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-block">Submit</button>
+            </div>
+        </form>
+        <a href="/">Back</a>
+    </div>
+</div> -->
+
+
+
+<div class="container">
+    <h1 style="text-align: center;">Edit Product</h1>
+    <div style="width:30%; margin: 25px auto">
+        <form action="/products/<%= product._id %>?_method=PUT" enctype="multipart/form-data" method="post">
+            <div class="form-group">
+                <input class="form-control" type="text" name="product[name]" id="name" placeholder="name"
+                    value="<%= product.name %>">
+            </div>
+            <div class="form-group">
+                <!-- <input class="form-control" type="text" name="image" placeholder="image"> -->
+                <span><b>Upload Image:</b></span>
+                <input type="file" name="product[image]" id="mypic" required /> <br>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="product[description]" id="description"
+                    placeholder="description" value="<%= product.description %>">
+            </div>
+            <div class=" form-group">
+                <input class="form-control" type="text" name="product[price]" id="price" placeholder="price"
+                    value="<%= product.price %>">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="product[stock]" id="stock" placeholder="stock"
+                    value="<%= product.stock %>">
+            </div>
+            <div class="form-group">
+                <select name="product[category]" class="form-control">
+                    <% if(product.category == 'mobile') { %>
+                    <option value="mobile" selected>Mobile</option>
+                    <% } else { %>
+                    <option value="mobile">Mobile</option>
+                    <% } %>
+                    <% if(product.category == 'laptop') { %>
+                    <option value="laptop" selected>Laptop</option>
+                    <% } else { %>
+                    <option value="laptop">Laptop</option>
+                    <% } %>
+                    <% if(product.category == 'camera') { %>
+                    <option value="camera" selected>Camera</option>
+                    <% } else { %>
+                    <option value="camera">Camera</option>
+                    <% } %>
+                    <% if(product.category == 'television') { %>
+                    <option value="television" selected>Television</option>
+                    <% } else { %>
+                    <option value="television">Television</option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-block" id="new-submit">Submit</button>
+            </div>
+        </form>
+        <a href="/">Back</a>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

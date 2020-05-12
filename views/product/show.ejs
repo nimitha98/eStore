@@ -1,0 +1,55 @@
+<%- include("../partials/header") %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">Electronics</p>
+            <div class="list-group">
+                <li class="list-group-item active">Laptop</li>
+                <li class="list-group-item">Mobile</li>
+                <li class="list-group-item">Camera</li>
+                <li class="list-group-item">Telivision</li>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <img class="image-fluid" src="/<%= product.image %>" alt="">
+                <div class="card-body">
+                    <h4 class="float-right">$<%= product.price %></h4>
+                    <a href="">
+                        <h4 class="card-title"><%= product.name %></h4>
+                    </a>
+                    <p class="card-text"><%= product.description %></p>
+                    <% if(currentUser && currentUser.username == 'admin') { %>
+                    <a class="btn btn-warning" href="/products/<%= product._id %>/edit">Edit</a>
+                    <form class="delete-form" action="/products/<%= product._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                    <% } %>
+                </div>
+            </div>
+            <hr>
+            <div class="card" id="comments">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="/addtocart/<%= product._id %>" class="btn btn-primary">Add to Cart</a>
+                        </div>
+                    </div>
+                    <% product.reviews.forEach(function(review){ %>
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <p class="float-right">10 days ago</p>
+                            <p> <%= review.text %> </p>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<%- include("../partials/footer") %>
